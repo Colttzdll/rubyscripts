@@ -1,9 +1,9 @@
 services:
   - type: web
     name: ruby-scripts
-    env: static
+    env: node
     buildCommand: npm install && npm run build
-    staticPublishPath: ./dist
+    startCommand: npm start
     headers:
       - path: /*
         name: X-Frame-Options
@@ -14,6 +14,11 @@ services:
       - path: /*
         name: X-Content-Type-Options
         value: nosniff
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
     routes:
       - type: rewrite
         source: /*

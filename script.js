@@ -16,6 +16,7 @@ let scripts = [];
 let currentThumbnail = '';
 let isEditing = false;
 let editingScriptId = null;
+let ws;
 
 // Adicionar classe loading ao body
 document.body.classList.add('loading');
@@ -610,3 +611,40 @@ function saveScript() {
     scriptModal.style.display = 'none';
     clearForm();
 }
+
+// Função para conectar ao WebSocket
+function connectWebSocket() {
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const wsUrl = `${protocol}//${window.location.host}`;
+    const ws = new WebSocket(wsUrl);
+
+    ws.onopen = () => {
+        console.log('WebSocket conectado');
+    };
+
+    ws.onmessage = (event) => {
+        try {
+            const data = JSON.parse(event.data);
+            handleWebSocketMessage(data);
+        } catch (error) {
+            console.error('Erro ao processar mensagem:', error);
+        }
+    };
+
+    ws.onclose = () => {
+        console.log('WebSocket desconectado. Tentando reconectar em 5 segundos...');
+        setTimeout(connectWebSocket, 5000);
+    };
+
+    return ws;
+}
+
+// Função para enviar atualizações via WebSocket
+function broadcastUpdate(type, data) {
+    if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({ type, data }));
+    }
+}
+
+// Inicializar WebSocket
+ws = connectWebSocket();
