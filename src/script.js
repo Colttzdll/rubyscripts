@@ -186,6 +186,15 @@ function createScriptCard(script) {
     const formattedUpdatedDate = formatDate(script.updatedAt);
     const isRecentlyModified = new Date(script.updatedAt) > new Date(Date.now() - 24 * 60 * 60 * 1000);
 
+    // Adicionar classe de modificação recente se necessário
+    if (isRecentlyModified) {
+        card.classList.add('recently-modified');
+        // Remover a classe após 5 minutos
+        setTimeout(() => {
+            card.classList.remove('recently-modified');
+        }, 5 * 60 * 1000); // 5 minutos em milissegundos
+    }
+
     card.innerHTML = `
         <div class="script-card-header">
             <div class="script-thumbnail">
@@ -227,7 +236,6 @@ function createScriptCard(script) {
         <div class="script-dates">
             <small>Criado em: ${formattedCreatedDate}</small>
             <small>Última modificação: ${formattedUpdatedDate}</small>
-            ${isRecentlyModified ? '<span class="recently-modified">Modificado recentemente</span>' : ''}
         </div>
     `;
     
