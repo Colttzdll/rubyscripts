@@ -1,0 +1,317 @@
+/* Global styles */
+:root {
+    --primary-purple: #8A2BE2;
+    --dark-purple: #4B0082;
+    --light-purple: #9370DB;
+    --hover-purple: #9932CC;
+    --background-dark: #1a1a2e;
+    --text-light: #ffffff;
+    --card-background: #2a1f3d;
+    --card-hover: #3a2f4d;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-dark);
+    color: var(--text-light);
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Container */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Header styles */
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.glow-icon {
+    color: var(--primary-purple);
+    font-size: 2em;
+}
+
+/* Search bar */
+.search-bar {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 12px 40px 12px 12px;
+    border: 2px solid var(--primary-purple);
+    border-radius: 8px;
+    background-color: var(--card-background);
+    color: var(--text-light);
+}
+
+.search-bar i {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--primary-purple);
+}
+
+/* Filter buttons */
+.filter-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 5px;
+}
+
+.filter-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    background-color: var(--card-background);
+    color: var(--text-light);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    white-space: nowrap;
+}
+
+.filter-btn:hover, .filter-btn.active {
+    background-color: var(--primary-purple);
+}
+
+/* Stats container */
+.stats-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background-color: var(--card-background);
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    border: 1px solid var(--primary-purple);
+}
+
+.stat-card i {
+    font-size: 1.5em;
+    color: var(--primary-purple);
+    margin-bottom: 8px;
+}
+
+/* Scripts grid */
+.scripts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 15px;
+}
+
+.script-card {
+    background-color: var(--card-background);
+    border-radius: 10px;
+    padding: 15px;
+    position: relative;
+    border: 1px solid var(--primary-purple);
+    will-change: transform;
+}
+
+.script-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.script-title {
+    font-size: 1.1em;
+    color: var(--text-light);
+}
+
+.script-category {
+    background-color: var(--primary-purple);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8em;
+}
+
+.script-content {
+    background-color: #1e1e2d;
+    padding: 15px;
+    border-radius: 6px;
+    margin: 15px 0;
+    max-height: 150px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Button styles */
+.button-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background-color: var(--card-background);
+    color: var(--text-light);
+    transition: background-color 0.2s ease;
+}
+
+.btn:hover {
+    background-color: var(--hover-purple);
+}
+
+.btn i {
+    font-size: 1.1em;
+}
+
+/* Footer */
+.site-footer {
+    margin-top: 40px;
+    padding: 20px 0;
+    border-top: 1px solid var(--primary-purple);
+}
+
+.footer-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer-buttons {
+    display: flex;
+    gap: 20px;
+}
+
+.discord-btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    background-color: #7289DA;
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.2s ease;
+}
+
+.discord-btn:hover {
+    background-color: #5c73c7;
+}
+
+/* Toast notifications */
+.toast-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.toast {
+    background-color: var(--card-background);
+    color: var(--text-light);
+    padding: 12px 24px;
+    border-radius: 8px;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-left: 4px solid var(--primary-purple);
+}
+
+/* Loading screen */
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--background-dark);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.loading-content {
+    text-align: center;
+}
+
+.loading-icon {
+    font-size: 3em;
+    color: var(--primary-purple);
+}
+
+.loading-text {
+    margin-top: 20px;
+    color: var(--primary-purple);
+}
+
+.loading-bar {
+    width: 200px;
+    height: 4px;
+    background-color: var(--card-background);
+    border-radius: 2px;
+    margin-top: 20px;
+    overflow: hidden;
+}
+
+.loading-progress {
+    width: 100%;
+    height: 100%;
+    background-color: var(--primary-purple);
+    animation: loading 2s ease-in-out infinite;
+}
+
+@keyframes loading {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+    
+    .stats-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .scripts-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .button-group {
+        justify-content: space-between;
+    }
+    
+    .btn {
+        flex: 1;
+        justify-content: center;
+    }
+} 

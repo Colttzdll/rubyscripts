@@ -42,9 +42,6 @@
                     <i class="fas fa-gem glow-icon"></i>
                     <h1>Ruby Scripts</h1>
                 </div>
-                <button class="admin-login-btn glow" id="adminLoginBtn">
-                    <i class="fas fa-user-shield"></i> Admin Login
-                </button>
             </div>
             
             <div class="search-bar">
@@ -86,23 +83,6 @@
                     <span id="totalChars">0</span>
                     <p>Total de caracteres</p>
                 </div>
-                <!-- Painel Admin -->
-                <div id="adminControls" style="display: none;">
-                    <div class="header-admin">
-                        <i class="fas fa-user-shield"></i>
-                        <p>Painel Admin</p>
-                    </div>
-                    <div class="admin-buttons">
-                        <button class="add-script-btn" id="addScriptBtn">
-                            <i class="fas fa-plus"></i>
-                            <span>Adicionar Script</span>
-                        </button>
-                        <button class="admin-btn" id="logoutBtn">
-                            <i class="fas fa-sign-out-alt"></i>
-                            <span>Sair</span>
-                        </button>
-                    </div>
-                </div>
             </div>
 
             <div class="scripts-grid" id="scriptsContainer">
@@ -114,87 +94,12 @@
         <footer class="site-footer">
             <div class="footer-content">
                 <div class="footer-buttons">
-                    <button class="admin-login-btn glow" id="footerAdminLoginBtn">
-                        <i class="fas fa-user-shield"></i> Admin Login
-                    </button>
                     <a href="https://discord.gg/DJSpG7B3" target="_blank" class="discord-btn glow">
                         <i class="fab fa-discord"></i> Discord
                     </a>
                 </div>
             </div>
         </footer>
-
-        <!-- Modal para adicionar/editar scripts (visível apenas para admin) -->
-        <div class="modal" id="scriptModal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2>Adicionar Script</h2>
-                    <button class="close-btn" id="closeModal">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                <div class="form-group">
-                    <label for="scriptTitle">Título do Script</label>
-                    <input type="text" id="scriptTitle" placeholder="Digite um título descritivo">
-                </div>
-                <div class="form-group">
-                    <label for="scriptCategory">Categoria</label>
-                    <select id="scriptCategory">
-                        <option value="game">Game Script</option>
-                        <option value="gui">GUI</option>
-                        <option value="admin">Admin</option>
-                        <option value="utility">Utilidade</option>
-                        <option value="other">Outro</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="scriptThumbnail">Thumbnail</label>
-                    <div class="thumbnail-input-container">
-                        <input type="file" id="scriptThumbnailFile" accept="image/*">
-                        <div id="thumbnailPreview" class="thumbnail-preview"></div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="scriptContent">Conteúdo do Script</label>
-                    <textarea id="scriptContent" placeholder="Cole seu script aqui"></textarea>
-                </div>
-                <div class="form-group">
-                    <label class="checkbox-container">
-                        <input type="checkbox" id="scriptFavorite">
-                        <span class="checkmark"></span>
-                        Marcar como favorito
-                    </label>
-                </div>
-                <div class="modal-buttons">
-                    <button id="saveScript" class="glow">Salvar</button>
-                    <button id="cancelScript" class="glow">Cancelar</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modal de Login Admin -->
-        <div class="modal" id="loginModal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2>Admin Login</h2>
-                    <button class="close-btn" id="closeLoginModal">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                <div class="form-group">
-                    <label for="adminPassword">Senha de Admin</label>
-                    <input type="password" id="adminPassword" placeholder="Digite a senha de admin">
-                </div>
-                <div class="modal-buttons">
-                    <button id="loginBtn" class="glow">
-                        <span>Entrar</span>
-                    </button>
-                    <button id="cancelLoginBtn" class="glow">
-                        <span>Cancelar</span>
-                    </button>
-                </div>
-            </div>
-        </div>
 
         <!-- Toast Container -->
         <div id="toastContainer" class="toast-container"></div>
@@ -211,7 +116,6 @@
     <!-- App scripts -->
     <script src="utils.js"></script>
     <script src="websocket.js"></script>
-    <script defer src="admin.js"></script>
-    <script defer src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html> 
