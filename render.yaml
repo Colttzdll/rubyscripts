@@ -19,8 +19,6 @@ services:
         value: production
       - key: PORT
         value: 3000
-      - key: MONGODB_URI
-        value: mongodb+srv://sladbeksmd:tFYonsKGCmenQcdD@cluster0.duxy8f5.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
     routes:
       - type: rewrite
         source: /*

@@ -19,38 +19,63 @@ function connectWebSocket() {
             
             switch (message.type) {
                 case 'script_added':
+                    if (!window.scripts) window.scripts = [];
                     if (!window.scripts.find(s => s.id === message.data.id)) {
                         window.scripts.push(message.data);
-                        window.updateStats();
-                        window.renderScripts();
-                        window.showToast('Novo script adicionado!', 'success');
+                        if (typeof window.updateStats === 'function') {
+                            window.updateStats();
+                        }
+                        if (typeof window.renderScripts === 'function') {
+                            window.renderScripts();
+                        }
+                        if (typeof window.showToast === 'function') {
+                            window.showToast('Novo script adicionado!', 'success');
+                        }
                     }
                     break;
                     
                 case 'script_edited':
+                    if (!window.scripts) window.scripts = [];
                     const editIndex = window.scripts.findIndex(s => s.id === message.data.id);
                     if (editIndex !== -1) {
                         window.scripts[editIndex] = message.data;
-                        window.updateStats();
-                        window.renderScripts();
-                        window.showToast('Um script foi atualizado!', 'info');
+                        if (typeof window.updateStats === 'function') {
+                            window.updateStats();
+                        }
+                        if (typeof window.renderScripts === 'function') {
+                            window.renderScripts();
+                        }
+                        if (typeof window.showToast === 'function') {
+                            window.showToast('Um script foi atualizado!', 'info');
+                        }
                     }
                     break;
                     
                 case 'script_deleted':
+                    if (!window.scripts) window.scripts = [];
                     const deleteIndex = window.scripts.findIndex(s => s.id === message.data);
                     if (deleteIndex !== -1) {
                         window.scripts.splice(deleteIndex, 1);
-                        window.updateStats();
-                        window.renderScripts();
-                        window.showToast('Um script foi removido!', 'warning');
+                        if (typeof window.updateStats === 'function') {
+                            window.updateStats();
+                        }
+                        if (typeof window.renderScripts === 'function') {
+                            window.renderScripts();
+                        }
+                        if (typeof window.showToast === 'function') {
+                            window.showToast('Um script foi removido!', 'warning');
+                        }
                     }
                     break;
                     
                 case 'full_update':
                     window.scripts = message.data;
-                    window.updateStats();
-                    window.renderScripts();
+                    if (typeof window.updateStats === 'function') {
+                        window.updateStats();
+                    }
+                    if (typeof window.renderScripts === 'function') {
+                        window.renderScripts();
+                    }
                     break;
             }
         } catch (error) {

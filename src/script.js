@@ -614,5 +614,15 @@ async function initializeApp() {
     }
 }
 
+// Expor funções e variáveis globalmente
+window.scripts = scripts;
+window.updateStats = updateStats;
+window.renderScripts = renderScripts;
+window.showToast = showToast;
+window.addNewScript = addNewScript;
+window.editScript = editScript;
+window.deleteScript = deleteScript;
+window.toggleFavorite = toggleFavorite;
+
 // Inicializar a aplicação
 initializeApp();
