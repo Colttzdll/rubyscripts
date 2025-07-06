@@ -9,6 +9,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <!-- Utilities must be loaded first -->
+    <script src="utils.js"></script>
 </head>
 <body class="line-numbers">
     <!-- Loading Screen -->
@@ -208,9 +210,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-lua.min.js"></script>
     <!-- App scripts -->
-    <script src="utils.js"></script>
-    <script src="admin.js"></script>
-    <script src="websocket.js"></script>
+    <script defer src="admin.js"></script>
+    <script defer src="websocket.js"></script>
     <script defer src="script.js"></script>
 </body>
 </html> 
