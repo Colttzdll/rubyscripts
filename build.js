@@ -1,59 +1,42 @@
 const fs = require('fs');
-const JavaScriptObfuscator = require('javascript-obfuscator');
 const path = require('path');
+const JavaScriptObfuscator = require('javascript-obfuscator');
 
-// Configurações de ofuscação
-const obfuscationOptions = {
-    compact: true,
-    controlFlowFlattening: true,
-    controlFlowFlatteningThreshold: 0.8,
-    deadCodeInjection: true,
-    deadCodeInjectionThreshold: 0.5,
-    debugProtection: true,
-    debugProtectionInterval: 4000,
-    disableConsoleOutput: true,
-    identifierNamesGenerator: 'hexadecimal',
-    log: false,
-    numbersToExpressions: true,
-    renameGlobals: true,
-    rotateStringArray: true,
-    selfDefending: true,
-    shuffleStringArray: true,
-    splitStrings: true,
-    splitStringsChunkLength: 5,
-    stringArray: true,
-    stringArrayEncoding: ['rc4'],
-    stringArrayThreshold: 0.8,
-    transformObjectKeys: true,
-    unicodeEscapeSequence: false
-};
-
-// Lista de arquivos para ofuscar
-const filesToObfuscate = [
-    'script.js',
-    'admin.js'
-];
-
-// Criar pasta dist se não existir
-if (!fs.existsSync('dist')) {
-    fs.mkdirSync('dist');
+// Ensure dist directory exists
+const distDir = path.join(__dirname, 'dist');
+if (!fs.existsSync(distDir)) {
+    fs.mkdirSync(distDir);
 }
 
-// Copiar arquivos HTML e CSS
-fs.copyFileSync('index.html', 'dist/index.html');
-fs.copyFileSync('styles.css', 'dist/styles.css');
+// Files to copy and process
+const files = {
+    'index.html': false, // false means no obfuscation
+    'styles.css': false,
+    'script.js': true,  // true means needs obfuscation
+    'admin.js': true
+};
 
-// Ofuscar cada arquivo JavaScript
-filesToObfuscate.forEach(file => {
-    const code = fs.readFileSync(file, 'utf8');
-    const obfuscationResult = JavaScriptObfuscator.obfuscate(code, obfuscationOptions);
-    fs.writeFileSync(`dist/${file}`, obfuscationResult.getObfuscatedCode());
-    console.log(`✅ Arquivo ${file} ofuscado com sucesso!`);
-});
+// Process each file
+for (const [file, needsObfuscation] of Object.entries(files)) {
+    const content = fs.readFileSync(path.join(__dirname, file), 'utf8');
+    
+    if (needsObfuscation) {
+        // Obfuscate JavaScript files
+        const obfuscationResult = JavaScriptObfuscator.obfuscate(content, {
+            compact: true,
+            controlFlowFlattening: true,
+            controlFlowFlatteningThreshold: 0.75,
+            numbersToExpressions: true,
+            simplify: true,
+            stringArrayShuffle: true,
+            splitStrings: true,
+            stringArrayThreshold: 0.75
+        });
+        fs.writeFileSync(path.join(distDir, file), obfuscationResult.getObfuscatedCode());
+    } else {
+        // Copy non-JavaScript files as is
+        fs.writeFileSync(path.join(distDir, file), content);
+    }
+}
 
-// Atualizar os caminhos no HTML
-let htmlContent = fs.readFileSync('dist/index.html', 'utf8');
-htmlContent = htmlContent.replace(/src="(.*?)\.js"/g, 'src="$1.js"');
-fs.writeFileSync('dist/index.html', htmlContent);
-
-console.log('\n🔒 Build completo! Os arquivos ofuscados estão na pasta dist/'); 
+console.log('Build completed successfully! Files are ready in the dist directory.'); 
