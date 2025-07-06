@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ruby Scripts Collection</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+</head>
+<body class="line-numbers">
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-icon">
+                <i class="fas fa-gem"></i>
+            </div>
+            <div class="loading-text">
+                <span>C</span>
+                <span>A</span>
+                <span>R</span>
+                <span>R</span>
+                <span>E</span>
+                <span>G</span>
+                <span>A</span>
+                <span>N</span>
+                <span>D</span>
+                <span>O</span>
+            </div>
+            <div class="loading-bar">
+                <div class="loading-progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <header>
+            <div class="header-container">
+                <div class="logo-container">
+                    <i class="fas fa-gem glow-icon"></i>
+                    <h1>Ruby Scripts</h1>
+                </div>
+                <button class="admin-login-btn glow" id="adminLoginBtn">
+                    <i class="fas fa-user-shield"></i> Admin Login
+                </button>
+            </div>
+            
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Pesquisar scripts...">
+                <i class="fas fa-search glow"></i>
+            </div>
+
+            <div class="filter-container">
+                <button class="filter-btn active" data-filter="all">Todos</button>
+                <button class="filter-btn" data-filter="favorite">Favoritos</button>
+                <button class="filter-btn" data-filter="recent">Recentes</button>
+            </div>
+        </header>
+
+        <main>
+            <div class="stats-container">
+                <div class="stat-card glow">
+                    <i class="fas fa-scroll"></i>
+                    <span id="totalScripts">0</span>
+                    <p>Scripts Totais</p>
+                </div>
+                <div class="stat-card glow">
+                    <i class="fas fa-star"></i>
+                    <span id="favoriteScripts">0</span>
+                    <p>Favoritos</p>
+                </div>
+                <div class="stat-card glow">
+                    <i class="fas fa-clock"></i>
+                    <span id="recentScripts">0</span>
+                    <p>Últimos 7 dias</p>
+                </div>
+                <div class="stat-card glow">
+                    <i class="fas fa-code"></i>
+                    <span id="avgScriptLength">0</span>
+                    <p>Média de linhas</p>
+                </div>
+                <div class="stat-card glow">
+                    <i class="fas fa-keyboard"></i>
+                    <span id="totalChars">0</span>
+                    <p>Total de caracteres</p>
+                </div>
+                <!-- Painel Admin -->
+                <div id="adminControls" style="display: none;">
+                    <div class="header-admin">
+                        <i class="fas fa-user-shield"></i>
+                        <p>Painel Admin</p>
+                    </div>
+                    <div class="admin-buttons">
+                        <button class="add-script-btn" id="addScriptBtn">
+                            <i class="fas fa-plus"></i>
+                            <span>Adicionar Script</span>
+                        </button>
+                        <button class="admin-btn" id="logoutBtn">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Sair</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scripts-grid" id="scriptsContainer">
+                <!-- Scripts serão adicionados dinamicamente aqui -->
+            </div>
+
+        </main>
+
+        <!-- Modal para adicionar/editar scripts (visível apenas para admin) -->
+        <div class="modal" id="scriptModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Adicionar Script</h2>
+                    <button class="close-btn" id="closeModal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="form-group">
+                    <label for="scriptTitle">Título do Script</label>
+                    <input type="text" id="scriptTitle" placeholder="Digite um título descritivo">
+                </div>
+                <div class="form-group">
+                    <label for="scriptCategory">Categoria</label>
+                    <select id="scriptCategory">
+                        <option value="game">Game Script</option>
+                        <option value="gui">GUI</option>
+                        <option value="admin">Admin</option>
+                        <option value="utility">Utilidade</option>
+                        <option value="other">Outro</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="scriptThumbnail">Thumbnail</label>
+                    <div class="thumbnail-input-container">
+                        <input type="file" id="scriptThumbnailFile" accept="image/*">
+                        <div id="thumbnailPreview" class="thumbnail-preview"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="scriptContent">Conteúdo do Script</label>
+                    <textarea id="scriptContent" placeholder="Cole seu script aqui"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="scriptFavorite">
+                        <span class="checkmark"></span>
+                        Marcar como favorito
+                    </label>
+                </div>
+                <div class="modal-buttons">
+                    <button id="saveScript" class="glow">Salvar</button>
+                    <button id="cancelScript" class="glow">Cancelar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de Login Admin -->
+        <div class="modal" id="loginModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Admin Login</h2>
+                    <button class="close-btn" id="closeLoginModal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="form-group">
+                    <label for="adminPassword">Senha de Admin</label>
+                    <input type="password" id="adminPassword" placeholder="Digite a senha de admin">
+                </div>
+                <div class="modal-buttons">
+                    <button id="loginBtn" class="glow">
+                        <span>Entrar</span>
+                    </button>
+                    <button id="cancelLoginBtn" class="glow">
+                        <span>Cancelar</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast notifications -->
+        <div id="toastContainer" class="toast-container"></div>
+
+        <!-- Diálogo de confirmação de exclusão -->
+        <div id="confirmDelete" class="confirm-dialog" style="display: none;">
+            <div class="confirm-content">
+                <h3><i class="fas fa-exclamation-triangle"></i> Confirmar Exclusão</h3>
+                <p>Você tem certeza que deseja excluir este script?</p>
+                <p class="warning-text">Esta ação não pode ser desfeita.</p>
+                <div class="confirm-buttons">
+                    <button id="cancelDeleteBtn" class="cancel-btn">Cancelar</button>
+                    <button id="confirmDeleteBtn" class="confirm-btn">Excluir Script</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Firebase scripts -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+    <!-- Prism.js scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-lua.min.js"></script>
+    <!-- App scripts -->
+    <script src="admin.js"></script>
+    <script src="websocket.js"></script>
+    <script defer src="script.js"></script>
+</body>
+</html> 
