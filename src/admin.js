@@ -8,6 +8,15 @@ const adminPassword = document.getElementById('adminPassword');
 const adminControls = document.getElementById('adminControls');
 const logoutBtn = document.getElementById('logoutBtn');
 
+// Função para mostrar mensagens
+function showMessage(message, type) {
+    if (typeof window.showToast === 'function') {
+        window.showToast(message, type);
+    } else {
+        console.log(message);
+    }
+}
+
 // Senha de admin (você deve alterar isso para uma senha segura)
 const ADMIN_PASSWORD = 'RubyScripts2024!';
 const ADMIN_PASSWORD_HASH = btoa(ADMIN_PASSWORD); // Codificação básica para não deixar a senha exposta
@@ -45,11 +54,13 @@ function login() {
         localStorage.setItem('isAdmin', 'true');
         updateAdminUI();
         loginModal.style.display = 'none';
-        showToast('Login realizado com sucesso!', 'success');
+        showMessage('Login realizado com sucesso!', 'success');
         adminPassword.value = ''; // Limpar senha
-        renderScripts(); // Recarregar os cards com os botões de admin
+        if (typeof window.renderScripts === 'function') {
+            window.renderScripts(); // Recarregar os cards com os botões de admin
+        }
     } else {
-        showToast('Senha incorreta!', 'error');
+        showMessage('Senha incorreta!', 'error');
     }
 }
 
@@ -59,8 +70,10 @@ function logout() {
     window.isAdmin = false;
     localStorage.removeItem('isAdmin');
     updateAdminUI();
-    showToast('Logout realizado com sucesso!', 'success');
-    renderScripts(); // Recarregar os cards sem os botões de admin
+    showMessage('Logout realizado com sucesso!', 'success');
+    if (typeof window.renderScripts === 'function') {
+        window.renderScripts(); // Recarregar os cards sem os botões de admin
+    }
 }
 
 // Event Listeners

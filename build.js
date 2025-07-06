@@ -10,17 +10,20 @@ if (!fs.existsSync(distDir)) {
 
 // Files to copy and process
 const files = {
-    'index.html': false, // false means no obfuscation
-    'styles.css': false,
-    'script.js': true,  // true means needs obfuscation
-    'admin.js': true
+    'index.html': { src: './', needsObfuscation: false },
+    'styles.css': { src: './src/', needsObfuscation: false },
+    'script.js': { src: './src/', needsObfuscation: true },
+    'admin.js': { src: './src/', needsObfuscation: true },
+    'utils.js': { src: './src/', needsObfuscation: true },
+    'websocket.js': { src: './src/', needsObfuscation: true }
 };
 
 // Process each file
-for (const [file, needsObfuscation] of Object.entries(files)) {
-    const content = fs.readFileSync(path.join(__dirname, file), 'utf8');
+for (const [file, config] of Object.entries(files)) {
+    const sourcePath = path.join(__dirname, config.src, file);
+    const content = fs.readFileSync(sourcePath, 'utf8');
     
-    if (needsObfuscation) {
+    if (config.needsObfuscation) {
         // Obfuscate JavaScript files
         const obfuscationResult = JavaScriptObfuscator.obfuscate(content, {
             compact: true,

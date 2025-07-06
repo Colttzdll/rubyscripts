@@ -4,13 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ruby Scripts Collection</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="dist/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
-    <!-- Utilities must be loaded first -->
-    <script src="utils.js"></script>
 </head>
 <body class="line-numbers">
     <!-- Loading Screen -->
@@ -185,22 +183,10 @@
             </div>
         </div>
 
-        <!-- Toast notifications -->
+        <!-- Toast Container -->
         <div id="toastContainer" class="toast-container"></div>
-
-        <!-- Diálogo de confirmação de exclusão -->
-        <div id="confirmDelete" class="confirm-dialog" style="display: none;">
-            <div class="confirm-content">
-                <h3><i class="fas fa-exclamation-triangle"></i> Confirmar Exclusão</h3>
-                <p>Você tem certeza que deseja excluir este script?</p>
-                <p class="warning-text">Esta ação não pode ser desfeita.</p>
-                <div class="confirm-buttons">
-                    <button id="cancelDeleteBtn" class="cancel-btn">Cancelar</button>
-                    <button id="confirmDeleteBtn" class="confirm-btn">Excluir Script</button>
-                </div>
-            </div>
-        </div>
     </div>
+
     <!-- Firebase scripts -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
@@ -210,8 +196,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-lua.min.js"></script>
     <!-- App scripts -->
-    <script defer src="admin.js"></script>
-    <script defer src="websocket.js"></script>
-    <script defer src="script.js"></script>
+    <script src="dist/utils.js"></script>
+    <script defer src="dist/admin.js"></script>
+    <script defer src="dist/websocket.js"></script>
+    <script defer src="dist/script.js"></script>
 </body>
 </html> 
