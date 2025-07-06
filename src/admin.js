@@ -1,5 +1,6 @@
 // Elementos do DOM para autenticação
 const adminLoginBtn = document.getElementById('adminLoginBtn');
+const footerAdminLoginBtn = document.getElementById('footerAdminLoginBtn');
 const loginModal = document.getElementById('loginModal');
 const loginBtn = document.getElementById('loginBtn');
 const cancelLoginBtn = document.getElementById('cancelLoginBtn');
@@ -30,6 +31,7 @@ function updateAdminUI() {
     window.isAdmin = isAdmin; // Atualizar window.isAdmin sempre que mudar
     if (isAdmin) {
         adminLoginBtn.style.display = 'none';
+        footerAdminLoginBtn.style.display = 'none';
         adminControls.style.display = 'block';
         // Habilitar edição nos cards de script
         document.querySelectorAll('.script-card').forEach(card => {
@@ -37,6 +39,7 @@ function updateAdminUI() {
         });
     } else {
         adminLoginBtn.style.display = 'block';
+        footerAdminLoginBtn.style.display = 'block';
         adminControls.style.display = 'none';
         // Desabilitar edição nos cards de script
         document.querySelectorAll('.script-card').forEach(card => {
@@ -78,6 +81,10 @@ function logout() {
 
 // Event Listeners
 adminLoginBtn.addEventListener('click', () => {
+    loginModal.style.display = 'block';
+});
+
+footerAdminLoginBtn.addEventListener('click', () => {
     loginModal.style.display = 'block';
 });
 

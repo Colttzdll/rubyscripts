@@ -219,12 +219,12 @@ h1 {
     font-size: 0.8rem;
     padding: 0.2rem 0.8rem;
     border-radius: 12px;
-    background: rgba(255, 23, 68, 0.1);
+    background: rgba(157, 78, 221, 0.1);
     color: var(--accent-color);
 }
 
 .script-card pre {
-    background: #000000;
+    background: #1a1a1a;
     padding: 1rem;
     border-radius: 8px;
     overflow-x: auto;
@@ -237,6 +237,67 @@ h1 {
 .script-card code {
     font-family: 'Fira Code', monospace;
     font-size: 0.9rem;
+}
+
+.script-card .card-buttons {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+}
+
+.script-card .card-buttons button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 8px;
+    background: rgba(157, 78, 221, 0.1);
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.script-card .card-buttons button:hover {
+    background: var(--accent-color);
+    transform: translateY(-2px);
+}
+
+.script-card .card-buttons button i {
+    font-size: 1rem;
+}
+
+.script-card .delete-btn {
+    background: rgba(157, 78, 221, 0.2) !important;
+}
+
+.script-card .delete-btn:hover {
+    background: var(--accent-color) !important;
+}
+
+.script-card .edit-btn {
+    background: rgba(157, 78, 221, 0.15) !important;
+}
+
+.script-card .edit-btn:hover {
+    background: var(--accent-color) !important;
+}
+
+.script-card .favorite-btn {
+    background: rgba(157, 78, 221, 0.1) !important;
+}
+
+.script-card .favorite-btn:hover {
+    background: var(--accent-color) !important;
+}
+
+.script-card .copy-btn {
+    background: rgba(157, 78, 221, 0.05) !important;
+}
+
+.script-card .copy-btn:hover {
+    background: var(--accent-color) !important;
 }
 
 /* Modal Styles */
@@ -1535,4 +1596,55 @@ body.loading {
     align-items: center;
     gap: 0.5rem;
     flex-shrink: 0;
+}
+
+/* Footer Styles */
+.site-footer {
+    background: var(--secondary-color);
+    padding: 1rem;
+    margin-top: 2rem;
+    border-top: 2px solid var(--accent-color);
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer-buttons {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.discord-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--accent-color);
+    color: var(--text-color);
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.discord-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 15px var(--glow-color);
+}
+
+.discord-btn i {
+    font-size: 1.2rem;
+}
+
+/* Ajuste para o botão de admin no footer */
+#footerAdminLoginBtn {
+    margin: 0;
 }
