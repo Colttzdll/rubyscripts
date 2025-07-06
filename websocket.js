@@ -3,55 +3,63 @@ let ws;
 
 // Função para conectar ao WebSocket
 function connectWebSocket() {
-    // Quando hospedar, troque esta URL pelo seu domínio
-    // Exemplo: wss://seusite.com/ws
-    ws = new WebSocket('ws://localhost:8080');
+    // Determinar a URL do WebSocket baseado no ambiente
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const wsUrl = `${protocol}//${window.location.host}`;
+    
+    ws = new WebSocket(wsUrl);
 
     ws.onopen = () => {
-        console.log('Conectado ao servidor WebSocket');
+        console.log('WebSocket conectado');
     };
 
     ws.onmessage = (event) => {
-        const message = JSON.parse(event.data);
-        
-        switch (message.type) {
-            case 'script_added':
-                scripts.push(message.data);
-                updateStats();
-                renderScripts();
-                showToast('Novo script adicionado!', 'success');
-                break;
-                
-            case 'script_edited':
-                const editIndex = scripts.findIndex(s => s.id === message.data.id);
-                if (editIndex !== -1) {
-                    scripts[editIndex] = message.data;
+        try {
+            const message = JSON.parse(event.data);
+            
+            switch (message.type) {
+                case 'script_added':
+                    if (!scripts.find(s => s.id === message.data.id)) {
+                        scripts.push(message.data);
+                        updateStats();
+                        renderScripts();
+                        showToast('Novo script adicionado!', 'success');
+                    }
+                    break;
+                    
+                case 'script_edited':
+                    const editIndex = scripts.findIndex(s => s.id === message.data.id);
+                    if (editIndex !== -1) {
+                        scripts[editIndex] = message.data;
+                        updateStats();
+                        renderScripts();
+                        showToast('Um script foi atualizado!', 'info');
+                    }
+                    break;
+                    
+                case 'script_deleted':
+                    const deleteIndex = scripts.findIndex(s => s.id === message.data);
+                    if (deleteIndex !== -1) {
+                        scripts.splice(deleteIndex, 1);
+                        updateStats();
+                        renderScripts();
+                        showToast('Um script foi removido!', 'warning');
+                    }
+                    break;
+                    
+                case 'full_update':
+                    scripts = message.data;
                     updateStats();
                     renderScripts();
-                    showToast('Um script foi atualizado!', 'info');
-                }
-                break;
-                
-            case 'script_deleted':
-                const deleteIndex = scripts.findIndex(s => s.id === message.data);
-                if (deleteIndex !== -1) {
-                    scripts.splice(deleteIndex, 1);
-                    updateStats();
-                    renderScripts();
-                    showToast('Um script foi removido!', 'warning');
-                }
-                break;
-                
-            case 'full_update':
-                scripts = message.data;
-                updateStats();
-                renderScripts();
-                break;
+                    break;
+            }
+        } catch (error) {
+            console.error('Erro ao processar mensagem WebSocket:', error);
         }
     };
 
     ws.onclose = () => {
-        console.log('Desconectado do servidor WebSocket');
+        console.log('WebSocket desconectado');
         // Tentar reconectar após 5 segundos
         setTimeout(connectWebSocket, 5000);
     };

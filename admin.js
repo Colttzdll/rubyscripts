@@ -101,16 +101,6 @@ updateAdminUI();
 window.isAdmin = isAdmin;
 window.updateAdminUI = updateAdminUI;
 
-// Função para verificar a senha de administrador
-function checkAdminPassword() {
-    const password = prompt('Digite a senha de administrador:');
-    // Senha mais forte com caracteres especiais, números, letras maiúsculas e minúsculas
-    return password === 'R#uby$cr1pts@2024!';
-}
-
-// Verificar se é administrador
-window.isAdmin = checkAdminPassword();
-
 // Se não for administrador, oculta os botões de admin
 if (!window.isAdmin) {
     document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'none');

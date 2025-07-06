@@ -605,7 +605,7 @@ function connectWebSocket() {
     ws.onmessage = (event) => {
         try {
             const data = JSON.parse(event.data);
-            handleWebSocketMessage(data);
+            // Mensagem já é tratada no websocket.js
         } catch (error) {
             console.error('Erro ao processar mensagem:', error);
         }
