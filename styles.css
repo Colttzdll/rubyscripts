@@ -123,12 +123,19 @@ body {
 }
 
 .script-card {
-    background-color: var(--card-background);
+    background: linear-gradient(145deg, var(--card-background), var(--dark-purple));
     border-radius: 10px;
     padding: 15px;
     position: relative;
     border: 1px solid var(--primary-purple);
-    will-change: transform;
+    box-shadow: 0 0 10px rgba(138, 43, 226, 0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.script-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 15px rgba(138, 43, 226, 0.4);
+    background: linear-gradient(145deg, var(--dark-purple), var(--card-background));
 }
 
 .script-header {
@@ -136,28 +143,33 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 15px;
+    border-bottom: 1px solid var(--primary-purple);
+    padding-bottom: 10px;
 }
 
 .script-title {
     font-size: 1.1em;
     color: var(--text-light);
+    text-shadow: 0 0 5px rgba(138, 43, 226, 0.3);
 }
 
 .script-category {
-    background-color: var(--primary-purple);
+    background: var(--primary-purple);
     padding: 4px 8px;
     border-radius: 4px;
     font-size: 0.8em;
+    box-shadow: 0 0 5px rgba(138, 43, 226, 0.3);
 }
 
 .script-content {
-    background-color: #1e1e2d;
+    background-color: rgba(30, 30, 45, 0.8);
     padding: 15px;
     border-radius: 6px;
     margin: 15px 0;
     max-height: 150px;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    border: 1px solid rgba(138, 43, 226, 0.2);
 }
 
 /* Button styles */
@@ -166,6 +178,8 @@ body {
     gap: 10px;
     margin-top: 15px;
     flex-wrap: wrap;
+    border-top: 1px solid var(--primary-purple);
+    padding-top: 10px;
 }
 
 .btn {
@@ -176,17 +190,20 @@ body {
     display: flex;
     align-items: center;
     gap: 5px;
-    background-color: var(--card-background);
+    background: linear-gradient(145deg, var(--card-background), var(--dark-purple));
     color: var(--text-light);
-    transition: background-color 0.2s ease;
+    transition: all 0.2s ease;
+    box-shadow: 0 0 5px rgba(138, 43, 226, 0.2);
 }
 
 .btn:hover {
-    background-color: var(--hover-purple);
+    background: linear-gradient(145deg, var(--dark-purple), var(--primary-purple));
+    box-shadow: 0 0 10px rgba(138, 43, 226, 0.4);
 }
 
 .btn i {
     font-size: 1.1em;
+    color: var(--light-purple);
 }
 
 /* Footer */
