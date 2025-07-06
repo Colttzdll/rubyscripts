@@ -20,13 +20,76 @@ let editingScriptId = null;
 // Adicionar classe loading ao body
 document.body.classList.add('loading');
 
+// Funções de API
+async function fetchScripts() {
+    try {
+        const response = await fetch('/api/scripts');
+        if (!response.ok) throw new Error('Erro ao carregar scripts');
+        return await response.json();
+    } catch (error) {
+        console.error('Erro ao buscar scripts:', error);
+        showToast('Erro ao carregar scripts', 'error');
+        return [];
+    }
+}
+
+async function createScript(scriptData) {
+    try {
+        const response = await fetch('/api/scripts', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(scriptData)
+        });
+        if (!response.ok) throw new Error('Erro ao criar script');
+        return await response.json();
+    } catch (error) {
+        console.error('Erro ao criar script:', error);
+        showToast('Erro ao criar script', 'error');
+        return null;
+    }
+}
+
+async function updateScript(id, scriptData) {
+    try {
+        const response = await fetch(`/api/scripts/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(scriptData)
+        });
+        if (!response.ok) throw new Error('Erro ao atualizar script');
+        return await response.json();
+    } catch (error) {
+        console.error('Erro ao atualizar script:', error);
+        showToast('Erro ao atualizar script', 'error');
+        return null;
+    }
+}
+
+async function deleteScriptFromAPI(id) {
+    try {
+        const response = await fetch(`/api/scripts/${id}`, {
+            method: 'DELETE'
+        });
+        if (!response.ok) throw new Error('Erro ao deletar script');
+        return true;
+    } catch (error) {
+        console.error('Erro ao deletar script:', error);
+        showToast('Erro ao deletar script', 'error');
+        return false;
+    }
+}
+
 // Função para gerar ID único
 function generateUniqueId() {
     return Date.now().toString(36) + Math.random().toString(36).substr(2);
 }
 
 // Função para adicionar novo script
-function addNewScript() {
+async function addNewScript() {
     const title = document.getElementById('scriptTitle').value.trim();
     const content = document.getElementById('scriptContent').value.trim();
     const category = document.getElementById('scriptCategory').value;
@@ -44,47 +107,35 @@ function addNewScript() {
             updatedAt: new Date().toISOString()
         };
         
-        scripts.push(newScript);
-        saveScripts();
-        // Notificar outros usuários
-        broadcastUpdate('script_added', newScript);
-        scriptModal.style.display = 'none';
-        showToast('Script adicionado com sucesso!', 'success');
-        
-        // Limpar formulário
-        document.getElementById('scriptTitle').value = '';
-        document.getElementById('scriptContent').value = '';
-        document.getElementById('scriptCategory').value = 'game';
-        document.getElementById('scriptFavorite').checked = false;
-        thumbnailFileInput.value = '';
-        updateThumbnailPreview('');
-        
-        // Renderizar scripts imediatamente
-        renderScripts();
+        const savedScript = await createScript(newScript);
+        if (savedScript) {
+            scripts.push(savedScript);
+            updateStats();
+            renderScripts();
+            scriptModal.style.display = 'none';
+            showToast('Script adicionado com sucesso!', 'success');
+            
+            // Limpar formulário
+            document.getElementById('scriptTitle').value = '';
+            document.getElementById('scriptContent').value = '';
+            document.getElementById('scriptCategory').value = 'game';
+            document.getElementById('scriptFavorite').checked = false;
+            thumbnailFileInput.value = '';
+            updateThumbnailPreview('');
+        }
     } else {
         showToast('Por favor, preencha todos os campos!', 'error');
     }
 }
 
-// Carregar scripts do localStorage
-function loadScripts() {
-    scripts = JSON.parse(localStorage.getItem('robloxScripts')) || [];
+// Carregar scripts da API
+async function loadScripts() {
+    scripts = await fetchScripts();
     updateStats();
     renderScripts();
     // Iniciar conexão WebSocket
     if (typeof window.connectWebSocket === 'function') {
         window.connectWebSocket();
-    }
-}
-
-// Função para salvar scripts
-function saveScripts() {
-    console.log('Salvando scripts:', scripts); // Debug
-    localStorage.setItem('robloxScripts', JSON.stringify(scripts));
-    updateStats();
-    // Enviar atualização para outros usuários
-    if (typeof window.broadcastUpdate === 'function') {
-        window.broadcastUpdate('full_update', scripts);
     }
 }
 
@@ -219,16 +270,24 @@ function setupCopyButtons() {
 }
 
 // Função para alternar favorito
-function toggleFavorite(id) {
+async function toggleFavorite(id) {
     const scriptIndex = scripts.findIndex(s => s.id === id);
     if (scriptIndex !== -1) {
-        scripts[scriptIndex].favorite = !scripts[scriptIndex].favorite;
-        saveScripts();
-        renderScripts();
-        showToast(
-            scripts[scriptIndex].favorite ? 'Script adicionado aos favoritos!' : 'Script removido dos favoritos!',
-            'success'
-        );
+        const updatedScript = {
+            ...scripts[scriptIndex],
+            favorite: !scripts[scriptIndex].favorite
+        };
+        
+        const savedScript = await updateScript(id, updatedScript);
+        if (savedScript) {
+            scripts[scriptIndex] = savedScript;
+            updateStats();
+            renderScripts();
+            showToast(
+                savedScript.favorite ? 'Script adicionado aos favoritos!' : 'Script removido dos favoritos!',
+                'success'
+            );
+        }
     }
 }
 
@@ -256,59 +315,18 @@ function editScript(id) {
 }
 
 // Função para deletar script
-async function deleteScript(scriptId) {
+async function deleteScript(id) {
     if (!window.isAdmin) return;
-
-    const script = scripts.find(s => s.id === scriptId);
-    if (!script) return;
-
-    const confirmDelete = document.getElementById('confirmDelete');
-    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
-    const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
-    const scriptTitle = confirmDelete.querySelector('p');
     
-    // Atualiza o texto com o título do script
-    scriptTitle.textContent = `Você tem certeza que deseja excluir o script "${script.title}"?`;
-
-    return new Promise((resolve) => {
-        const handleDelete = () => {
-            const scriptIndex = scripts.findIndex(s => s.id === scriptId);
-            if (scriptIndex !== -1) {
-                const deletedScript = scripts.splice(scriptIndex, 1)[0];
-                saveScripts();
-                // Notificar outros usuários
-                broadcastUpdate('script_deleted', deletedScript);
-                showToast('Script excluído com sucesso!', 'success');
-                
-                // Renderizar scripts imediatamente
-                renderScripts();
-            }
-            confirmDelete.style.display = 'none';
-            cleanup();
-            resolve(true);
-        };
-
-        const handleCancel = () => {
-            confirmDelete.style.display = 'none';
-            cleanup();
-            resolve(false);
-        };
-
-        const cleanup = () => {
-            confirmDeleteBtn.removeEventListener('click', handleDelete);
-            cancelDeleteBtn.removeEventListener('click', handleCancel);
-        };
-
-        // Remove event listeners antigos antes de adicionar novos
-        cleanup();
-        
-        // Adiciona os novos event listeners
-        confirmDeleteBtn.addEventListener('click', handleDelete);
-        cancelDeleteBtn.addEventListener('click', handleCancel);
-        
-        // Mostra o diálogo
-        confirmDelete.style.display = 'flex';
-    });
+    if (confirm('Tem certeza que deseja excluir este script?')) {
+        const success = await deleteScriptFromAPI(id);
+        if (success) {
+            scripts = scripts.filter(s => s.id !== id);
+            updateStats();
+            renderScripts();
+            showToast('Script excluído com sucesso!', 'success');
+        }
+    }
 }
 
 // Event Listeners
@@ -456,28 +474,6 @@ async function notifyDiscord() {
     }
 }
 
-// Modificar a função initializeApp para incluir a notificação
-async function initializeApp() {
-    try {
-        // Notificar Discord sobre o novo acesso
-        await notifyDiscord();
-        
-        // Carregar scripts do localStorage
-        loadScripts();
-        
-        // Remover classe loading
-        document.body.classList.remove('loading');
-        loadingScreen.style.display = 'none';
-    } catch (error) {
-        console.error('Erro ao inicializar:', error);
-        document.body.classList.remove('loading');
-        loadingScreen.style.display = 'none';
-    }
-}
-
-// Iniciar o app quando a página carregar
-window.addEventListener('load', initializeApp);
-
 // Função para converter arquivo em Base64
 function fileToBase64(file) {
     return new Promise((resolve, reject) => {
@@ -541,7 +537,7 @@ function clearForm() {
 }
 
 // Função para salvar script (novo ou editado)
-function saveScript() {
+async function saveScript() {
     const title = document.getElementById('scriptTitle').value.trim();
     const content = document.getElementById('scriptContent').value.trim();
     const category = document.getElementById('scriptCategory').value;
@@ -556,7 +552,7 @@ function saveScript() {
         // Modo edição
         const scriptIndex = scripts.findIndex(s => s.id === editingScriptId);
         if (scriptIndex !== -1) {
-            scripts[scriptIndex] = {
+            const updatedScript = {
                 ...scripts[scriptIndex],
                 title,
                 content,
@@ -565,8 +561,12 @@ function saveScript() {
                 thumbnail: currentThumbnail,
                 updatedAt: new Date().toISOString()
             };
-            broadcastUpdate('script_edited', scripts[scriptIndex]);
-            showToast('Script atualizado com sucesso!', 'success');
+            
+            const savedScript = await updateScript(editingScriptId, updatedScript);
+            if (savedScript) {
+                scripts[scriptIndex] = savedScript;
+                showToast('Script atualizado com sucesso!', 'success');
+            }
         }
     } else {
         // Modo adição
@@ -580,15 +580,39 @@ function saveScript() {
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString()
         };
-        scripts.push(newScript);
-        broadcastUpdate('script_added', newScript);
-        showToast('Script adicionado com sucesso!', 'success');
+        
+        const savedScript = await createScript(newScript);
+        if (savedScript) {
+            scripts.push(savedScript);
+            showToast('Script adicionado com sucesso!', 'success');
+        }
     }
 
-    // Salvar, limpar e atualizar
-    localStorage.setItem('robloxScripts', JSON.stringify(scripts));
+    // Atualizar, limpar e fechar
     updateStats();
     renderScripts();
     scriptModal.style.display = 'none';
     clearForm();
 }
+
+// Inicializar aplicação
+async function initializeApp() {
+    try {
+        // Notificar Discord sobre o novo acesso
+        await notifyDiscord();
+        
+        // Carregar scripts da API
+        await loadScripts();
+        
+        // Remover classe loading
+        document.body.classList.remove('loading');
+        loadingScreen.style.display = 'none';
+    } catch (error) {
+        console.error('Erro ao inicializar:', error);
+        document.body.classList.remove('loading');
+        loadingScreen.style.display = 'none';
+    }
+}
+
+// Inicializar a aplicação
+initializeApp();
