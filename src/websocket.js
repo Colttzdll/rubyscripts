@@ -19,38 +19,38 @@ function connectWebSocket() {
             
             switch (message.type) {
                 case 'script_added':
-                    if (!scripts.find(s => s.id === message.data.id)) {
-                        scripts.push(message.data);
-                        updateStats();
-                        renderScripts();
-                        showToast('Novo script adicionado!', 'success');
+                    if (!window.scripts.find(s => s.id === message.data.id)) {
+                        window.scripts.push(message.data);
+                        window.updateStats();
+                        window.renderScripts();
+                        window.showToast('Novo script adicionado!', 'success');
                     }
                     break;
                     
                 case 'script_edited':
-                    const editIndex = scripts.findIndex(s => s.id === message.data.id);
+                    const editIndex = window.scripts.findIndex(s => s.id === message.data.id);
                     if (editIndex !== -1) {
-                        scripts[editIndex] = message.data;
-                        updateStats();
-                        renderScripts();
-                        showToast('Um script foi atualizado!', 'info');
+                        window.scripts[editIndex] = message.data;
+                        window.updateStats();
+                        window.renderScripts();
+                        window.showToast('Um script foi atualizado!', 'info');
                     }
                     break;
                     
                 case 'script_deleted':
-                    const deleteIndex = scripts.findIndex(s => s.id === message.data);
+                    const deleteIndex = window.scripts.findIndex(s => s.id === message.data);
                     if (deleteIndex !== -1) {
-                        scripts.splice(deleteIndex, 1);
-                        updateStats();
-                        renderScripts();
-                        showToast('Um script foi removido!', 'warning');
+                        window.scripts.splice(deleteIndex, 1);
+                        window.updateStats();
+                        window.renderScripts();
+                        window.showToast('Um script foi removido!', 'warning');
                     }
                     break;
                     
                 case 'full_update':
-                    scripts = message.data;
-                    updateStats();
-                    renderScripts();
+                    window.scripts = message.data;
+                    window.updateStats();
+                    window.renderScripts();
                     break;
             }
         } catch (error) {
@@ -77,4 +77,8 @@ function broadcastUpdate(action, data) {
             data: data
         }));
     }
-} 
+}
+
+// Expor funções globalmente
+window.connectWebSocket = connectWebSocket;
+window.broadcastUpdate = broadcastUpdate; 
